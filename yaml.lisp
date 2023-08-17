@@ -10,13 +10,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defpackage :yml
+(defpackage :simian.yml-unparser
+  (:nicknames :yml :yml-unparser)
   (:use :cl :simian)
   (:export #:comment
            #:unparse
            #:indent
-           #:unparse-mapping
-           #:sequence))
+           #:unparse-mapping))
 
 (in-package :yml)
 

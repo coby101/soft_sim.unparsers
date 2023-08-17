@@ -10,6 +10,14 @@
 ;;;   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defpackage :simian.dot-unparser
+  (:nicknames :dot)
+  (:use :simian :cl)
+  (:export #:unparse-entity
+           #:unparse-entity-cluster
+           #:indent
+           #:unparse-graph))
+
 (in-package :dot)
 
 ;; sytax defined here: https://graphviz.org/doc/info/lang.html

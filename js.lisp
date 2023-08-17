@@ -9,6 +9,12 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defpackage :simian.js-unparser
+  (:nicknames :js)
+  (:use :simian :cl)
+  (:export #:comment-out
+           #:make-indent))
+
 (in-package :js)
 
 (defun comment-out (stream str &rest args)

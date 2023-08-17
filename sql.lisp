@@ -10,6 +10,16 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defpackage :simian.sql-unparser
+  (:nicknames :sql-unparser :sql)
+  (:use :simian :cl)
+  (:export #:comment
+           #:unparse
+           #:unparse-table-definition
+           #:format-expression
+           #:unparse-expression
+           #:indent)
+
 (in-package :sql)
 
 (defparameter *pretty-print* t)

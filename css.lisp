@@ -9,6 +9,11 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defpackage :simian.css-unparser
+  (:nicknames :css)
+  (:use :simian :cl)
+  (:export #:comment-out))
+
 (in-package :css)
 
 (defun comment-out (stream str &rest args)

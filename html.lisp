@@ -9,6 +9,29 @@
 ;;;  
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defpackage simian.html-unparser
+  (:nicknames :html)
+  (:use :simian :cl)
+  (:export #:comment
+           #:unparse
+           #:make-indent
+           #:ltag
+           #:div
+           #:theading
+           #:table
+           #:tcell
+           #:tbody
+           #:thead
+           #:trow
+           #:heading`
+           #:image
+           #:link
+           #:button
+           #:tag
+           #:p
+           ))
+
 (in-package html)
 
 (defmethod ltag (ordered? (content string) &rest attributes)

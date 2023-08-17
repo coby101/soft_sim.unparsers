@@ -10,6 +10,13 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defpackage simian.english-unparser
+  (:nicknames :english :english-unparser)
+  (:use :simian :cl)
+  (:export #:unparse
+           #:unparse-expression
+           #:unparse-multiplicity))
+
 (in-package :english)
 
 (defun unparse-multiplicity (expression)

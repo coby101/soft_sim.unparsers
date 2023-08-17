@@ -9,12 +9,35 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defpackage :simian.ruby-unparser
+  (:nicknames :ruby :ruby-unparser)
+  (:use :simian :cl)
+  (:export #:comment
+           #:unparse
+           #:unparse-expression
+           #:unparse-datatype
+           #:unparse-formatting
+           #:unparse-array
+           #:unparse-hash
+           #:unparse-data
+           #:unparse-if-statement
+           #:returns-date
+           #:returns-string
+           #:make-indent
+           #:model-name
+           #:schema-name
+           #:comment-out
+           #:indent-block
+           "*RUBY-CONSTANTS*"))
+
 (in-package :ruby)
 
-(defparameter *include-rails* nil)
+(defparameter *include-rails* nil
+  "set to t if you want outputed code to use Rails methods outside of standard Ruby")
 (defparameter *legal-name-chars*
   (coerce "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
-          'list))
+          'list)
+  "characters not in this list will not be allowed as method names")
 (defparameter *ruby-constants* '("true" "false" "nil" "self"))
 
 (defun reserved-column-name? (name ent)
