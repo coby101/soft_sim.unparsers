@@ -15,6 +15,7 @@
   (:use :simian :cl)
   (:export #:unparse-entity
            #:unparse-entity-cluster
+           #:unparse-view
            #:indent
            #:unparse-graph))
 
