@@ -1,5 +1,5 @@
 ;;;===========================================================================
-;;; file:   yml.lisp
+;;; file:   yaml.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2022-01-21
 ;;;
@@ -14,8 +14,9 @@
   (:nicknames :yml :yml-unparser)
   (:use :cl :simian)
   (:export #:comment
-           #:unparse
            #:indent
+           #:unparse
+           #:unparse-pair-tree
            #:unparse-mapping))
 
 (in-package :yml)

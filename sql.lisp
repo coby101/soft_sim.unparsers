@@ -16,9 +16,10 @@
   (:export #:comment
            #:unparse
            #:unparse-table-definition
+           #:unparse-attribute-references
            #:format-expression
            #:unparse-expression
-           #:indent)
+           #:indent))
 
 (in-package :sql)
 

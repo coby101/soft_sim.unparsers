@@ -13,24 +13,32 @@
   (:nicknames :ruby :ruby-unparser)
   (:use :simian :cl)
   (:export #:comment
+           #:comment-with-warning
+           #:comment-out
+           #:indent-block
            #:unparse
+           #:unparse-method
            #:unparse-expression
+           #:negate-expression
            #:unparse-datatype
            #:unparse-formatting
            #:unparse-array
            #:unparse-hash
+           #:unparse-range
+           #:unparse-lambda
+           #:is-range?
            #:unparse-data
            #:unparse-if-statement
-           #:returns-date
-           #:returns-string
            #:make-indent
+           #:make-legal-name
            #:model-name
            #:schema-name
-           #:comment-out
-           #:indent-block
-           "*RUBY-CONSTANTS*"))
+           #:*ruby-constants*
+           #:*include-rails*))
 
 (in-package :ruby)
+
+(load-unparser "sql")
 
 (defparameter *include-rails* nil
   "set to t if you want outputed code to use Rails methods outside of standard Ruby")
@@ -562,50 +570,6 @@
   (if (returns-string? (car args))
       (unparse-expression (car args))
       (format nil "~a.to_s" (unparse-expression (car args)))))
-
-(defmethod returns-string? ((obj t))
-  (error "unhandled object type in returns-string? (~a - ~a" (type-of obj) obj))
-(defmethod returns-string? ((num number)) nil)
-(defmethod returns-string? ((str string)) t)
-(defmethod returns-string? ((obj formula))
-  (returns-string? (expression obj)))
-(defmethod returns-string? ((obj attribute))
-  (eql (data-type obj) :string))
-(defmethod returns-string? ((op symbol))
-  (and (get-operator op) (returns-string? (get-operator op))))
-
-(defmethod returns-string? ((op operator))
-  (eql (return-type op) :string))
-
-(defmethod returns-string? ((obj list))
-  (if (or (typep (car obj) 'operator) (operator-symbol? (car obj)))
-      (returns-string? (car obj))
-      (error "still confused ~a" obj)))
-
-
-(defmethod returns-date? ((obj t))
-  (error "unhandled object type in returns-date? (~a - ~a" (type-of obj) obj))
-(defmethod returns-date? ((num number)) nil)
-(defmethod returns-date? ((str string)) nil)
-(defmethod returns-date? ((obj formula))
-  (returns-date? (expression obj)))
-(defmethod returns-date? ((obj attribute))
-  (or (eql (data-type obj) :date)
-      (eql (data-type obj) :datetime)))
-(defmethod returns-date? ((op symbol))
-  (and (get-operator op) (returns-date? (get-operator op))))
-
-(defmethod returns-date? ((op operator))
-  (or (eql (return-type op) :date)
-      (eql (return-type op) :datetime)))
-
-(defmethod returns-date? ((obj list))
-  (cond ((or (typep (car obj) 'operator) (operator-symbol? (car obj)))
-         (returns-date? (car obj)))
-        ((and (or (typep (car obj) 'entity) (typep (car obj) 'relation))
-              (typep (cadr obj) 'attribute))
-         (returns-date? (cadr obj)))
-        (t (error "still confused ~a" obj))))
 
 (defmethod unparse-formatting ((data t) (type t))
   (format nil "~a.to_s" data))

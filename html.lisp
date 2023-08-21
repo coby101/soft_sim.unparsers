@@ -24,15 +24,17 @@
            #:tbody
            #:thead
            #:trow
-           #:heading`
+           #:heading
            #:image
            #:link
            #:button
            #:tag
+           #:open-tag
+           #:close-tag
            #:p
            ))
 
-(in-package html)
+(in-package :html)
 
 (defmethod ltag (ordered? (content string) &rest attributes)
   (let ((tag (if ordered? "ol" "ul")))
