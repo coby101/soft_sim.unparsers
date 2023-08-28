@@ -5,9 +5,9 @@
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
-;;;  - code related to unparsing ruby code for simian:*application* object data
+;;;  - code related to unparsing ruby code for simian:*application* objects
 ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;===========================================================================
 
 (defpackage :simian.ruby-unparser
   (:nicknames :ruby :ruby-unparser)
