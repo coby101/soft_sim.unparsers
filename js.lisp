@@ -5,9 +5,9 @@
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
-;;;  - code related to unparsing java script for simian:*application* object data
+;;;  - code related to unparsing java script for simian:*application* objects
 ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;===========================================================================
 
 (defpackage :simian.js-unparser
   (:nicknames :js)
