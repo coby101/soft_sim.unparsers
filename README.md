@@ -10,8 +10,8 @@ Development and usage of the different unparsers requires a lisp environment wit
 As a suggested starting point, here is a template for an example unparser for the format "new"
 
 BEGIN
-
-`(defpackage simian.new-unparser
+```
+(defpackage simian.new-unparser
   (:nicknames :new)
   (:use :simian :cl)
   (:export #:comment
@@ -62,6 +62,6 @@ BEGIN
 ;;; tab-width: 2
 ;;; indent-tabs-mode: nil
 ;;; End:
-`
+```
 END
 
