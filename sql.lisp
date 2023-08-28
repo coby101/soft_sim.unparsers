@@ -1,10 +1,10 @@
 ;;;===========================================================================
-;;; file:   unparsers/sql.lisp
+;;; file:   sql.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-01-12
 ;;;
 ;;;---------------------------------------------------------------------------
-;;;  - code related to writing SQL for *application* object data
+;;;  - code related to writing SQL for simian:*application* object data
 ;;;   
 ;;; 2020
 ;;;
@@ -311,3 +311,9 @@
 
 (defmethod unparse-expression ((operator (eql '$in)) &optional args)
     (format nil "~a IN (~{~a~^, ~})" (unparse-expression (car args)) (mapcar #'unparse-expression (cdr args))))
+
+;;;===========================================================================
+;;; Local variables:
+;;; tab-width: 2
+;;; indent-tabs-mode: nil
+;;; End:

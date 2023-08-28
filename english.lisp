@@ -1,10 +1,10 @@
 ;;;===========================================================================
-;;; file:   unparsers/english.lisp
+;;; file:   english.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-07-02
 ;;;
 ;;;---------------------------------------------------------------------------
-;;;  - code related to writing formulas in non-technical english
+;;;  - code related to writing non-technical english for simian:*application* object data
 ;;;   
 ;;; 2020
 ;;;
@@ -346,6 +346,6 @@
 
 ;;;===========================================================================
 ;;; Local variables:
-;;; tab-width: 4
+;;; tab-width: 2
 ;;; indent-tabs-mode: nil
 ;;; End:

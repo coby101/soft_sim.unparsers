@@ -1,14 +1,14 @@
 ;;;===========================================================================
-;;; file:   unparsers/dot.lisp
+;;; file:   dot.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-07-23
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
 ;;;  - code related to creating .DOT files for tools such as graphviz
-;;;    to create entity relationship diagrams
+;;;    to create entity relationship diagrams for simian:*application* objects
 ;;;   
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defpackage :simian.dot-unparser
   (:nicknames :dot)
@@ -186,5 +186,8 @@ digraph ~s{
    (apply #'append
           (mapcar #'relationships entities))))
 
-
- 
+;;;===========================================================================
+;;; Local variables:
+;;; tab-width: 2
+;;; indent-tabs-mode: nil
+;;; End: 

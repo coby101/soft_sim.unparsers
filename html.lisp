@@ -1,12 +1,10 @@
 ;;;===========================================================================
-;;; file:   lib/unparsers/html.lisp
+;;; file:   html.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-01-12
 ;;;
 ;;;---------------------------------------------------------------------------
-;;;  - code related to writing HTML for *application* object data
-;;;
-;;;  
+;;;  - code related to writing HTML for simian:*application* object data
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -171,9 +169,8 @@
       (mapcar #'unparse list)))
 
 
-
 ;;;===========================================================================
 ;;; Local variables:
-;;; tab-width: 4
+;;; tab-width: 2
 ;;; indent-tabs-mode: nil
 ;;; End:

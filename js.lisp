@@ -1,11 +1,11 @@
 ;;;===========================================================================
-;;; file:   unparsers/js.lisp
+;;; file:   js.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-11-15
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
-;;;  - code related to unparsing java script
+;;;  - code related to unparsing java script for simian:*application* object data
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -33,8 +33,6 @@
 
 ;;;===========================================================================
 ;;; Local variables:
-;;; tab-width: 4
+;;; tab-width: 2
 ;;; indent-tabs-mode: nil
 ;;; End:
-
-

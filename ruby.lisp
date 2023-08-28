@@ -1,11 +1,11 @@
 ;;;===========================================================================
-;;; file:   unparsers/ruby.lisp
+;;; file:   ruby.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-07-23
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
-;;;  - code related to unparsing ruby code
+;;;  - code related to unparsing ruby code for simian:*application* object data
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -624,6 +624,6 @@
 
 ;;;===========================================================================
 ;;; Local variables:
-;;; tab-width: 4
+;;; tab-width: 2
 ;;; indent-tabs-mode: nil
 ;;; End:

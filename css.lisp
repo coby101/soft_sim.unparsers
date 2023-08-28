@@ -1,11 +1,11 @@
 ;;;===========================================================================
-;;; file:   unparsers/css.lisp
+;;; file:   css.lisp
 ;;; auth:   Coby Beck
 ;;; date:   2021-11-30
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
-;;;  - code related to unparsing CSS data
+;;;  - code related to unparsing CSS data for simian:*application* object data
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -23,8 +23,6 @@
 
 ;;;===========================================================================
 ;;; Local variables:
-;;; tab-width: 4
+;;; tab-width: 2
 ;;; indent-tabs-mode: nil
 ;;; End:
-
-
