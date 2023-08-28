@@ -8,7 +8,7 @@
 ;;;  - code related to creating .DOT files for tools such as graphviz
 ;;;    to create entity relationship diagrams for simian:*application* objects
 ;;;   
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;===========================================================================
 
 (defpackage :simian.dot-unparser
   (:nicknames :dot)
