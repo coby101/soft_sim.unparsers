@@ -5,7 +5,7 @@
 ;;;
 ;;;---------------------------------------------------------------------------
 ;;;
-;;;  - code related to unparsing CSS data for simian:*application* object data
+;;;  - code related to unparsing CSS from simian:*application* objects
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
