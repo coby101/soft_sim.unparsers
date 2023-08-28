@@ -7,7 +7,7 @@
 ;;;
 ;;;  - code related to unparsing CSS from simian:*application* objects
 ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;===========================================================================
 
 (defpackage :simian.css-unparser
   (:nicknames :css)
