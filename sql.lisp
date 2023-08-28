@@ -4,11 +4,10 @@
 ;;; date:   2021-01-12
 ;;;
 ;;;---------------------------------------------------------------------------
-;;;  - code related to writing SQL for simian:*application* object data
-;;;   
-;;; 2020
 ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;  - code related to writing SQL for simian:*application* objects
+;;;   
+;;;===========================================================================
 
 (defpackage :simian.sql-unparser
   (:nicknames :sql-unparser :sql)
