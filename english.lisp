@@ -13,7 +13,9 @@
   (:use :simian :cl)
   (:export #:unparse
            #:unparse-expression
-           #:unparse-multiplicity))
+           #:unparse-multiplicity
+           #:with-article
+           #:designation-with-article))
 
 (in-package :english)
 
@@ -341,6 +343,20 @@
                        (unparse-expression (cadr args))))
               
 ))))
+
+(defun with-article (word)
+  (let ((stripped (remove #\" word)))
+    (if (> (length stripped) 0)
+        (if (member (elt stripped 0) '(#\a #\e #\i #\o #\A #\E #\I #\O))
+            (strcat "an " word)
+            (strcat "a " word))
+        word)))
+
+(defun designation-with-article (obj slot &optional (quote t))
+  (let ((q-mark (if quote "\"" "")))
+    (with-article
+        (strcat q-mark (ignore-errors (funcall slot obj)) q-mark))))
+
 
 ;;;===========================================================================
 ;;; Local variables:
