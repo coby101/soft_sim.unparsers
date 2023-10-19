@@ -1,38 +1,23 @@
-;;;===========================================================================
-;;; file:   html.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-01-12
+;;;=======================================================================================
 ;;;
-;;;---------------------------------------------------------------------------
-;;;  - code related to writing HTML for simian:*application* object data
+;;;  - methods and functions related to writing HTML for simian:*application* object data
 ;;;
-;;;===========================================================================
-
-(defpackage simian.html-unparser
-  (:nicknames :html)
-  (:use :simian :cl)
-  (:export #:comment
-           #:unparse
-           #:make-indent
-           #:ltag
-           #:div
-           #:theading
-           #:table
-           #:tcell
-           #:tbody
-           #:thead
-           #:trow
-           #:heading
-           #:image
-           #:link
-           #:button
-           #:tag
-           #:open-tag
-           #:close-tag
-           #:p
-           ))
+;;;=======================================================================================
 
 (in-package :html)
+
+(defun make-indent ()
+  (make-string (* 2 *nesting-level*) :initial-element #\Space))
+
+(defun open-tag (tag &rest properties)
+  (format nil "~a<~a~{ ~a=\"~a\"~}>"
+          (make-indent) (string-downcase tag) (downcase-keys properties)))
+
+(defun close-tag (tag)
+  (format nil "~a</~a>" (make-indent) (string-downcase tag)))
+
+(defun tag (tag text &rest attributes)
+  (format nil "~a~a~a" (apply #'open-tag tag attributes) text (close-tag tag)))
 
 (defmethod ltag (ordered? (content string) &rest attributes)
   (let ((tag (if ordered? "ol" "ul")))
@@ -118,22 +103,9 @@
   (let ((*nesting-level* 0))
     (apply #'tag "button" text (append (list :type type) attributes))))
 
-(defun tag (tag text &rest attributes)
-  (format nil "~a~a~a" (apply #'open-tag tag attributes) text (close-tag tag)))
-
-(defun open-tag (tag &rest properties)
-  (format nil "~a<~a~{ ~a=\"~a\"~}>"
-          (make-indent) (string-downcase tag) (downcase-keys properties)))
-
-(defun close-tag (tag)
-  (format nil "~a</~a>" (make-indent) (string-downcase tag)))
-
 (defun p (content &rest attributes)
   (let ((*nesting-level* 0))
     (apply #'tag "p" (or content "") attributes)))
-
-(defun make-indent ()
-  (make-string (* 2 *nesting-level*) :initial-element #\Space))
 
 
 (defmethod unparse ((obj t))

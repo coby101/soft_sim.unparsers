@@ -1,24 +1,8 @@
-;;;===========================================================================
-;;; file:   sql.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-01-12
+;;;==================================================================================
 ;;;
-;;;---------------------------------------------------------------------------
-;;;
-;;;  - code related to writing SQL for simian:*application* objects
+;;;  - methods and functions related to writing SQL for simian:*application* objects
 ;;;   
-;;;===========================================================================
-
-(defpackage :simian.sql-unparser
-  (:nicknames :sql-unparser :sql)
-  (:use :simian :cl)
-  (:export #:comment
-           #:unparse
-           #:unparse-table-definition
-           #:unparse-attribute-references
-           #:format-expression
-           #:unparse-expression
-           #:indent))
+;;;==================================================================================
 
 (in-package :sql)
 

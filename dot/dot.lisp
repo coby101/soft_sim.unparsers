@@ -1,23 +1,9 @@
-;;;===========================================================================
-;;; file:   dot.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-07-23
+;;;===================================================================================
 ;;;
-;;;---------------------------------------------------------------------------
-;;;
-;;;  - code related to creating .DOT files for tools such as graphviz
+;;;  - methods and functions related to creating .DOT files for tools such as graphviz
 ;;;    to create entity relationship diagrams for simian:*application* objects
 ;;;   
-;;;===========================================================================
-
-(defpackage :simian.dot-unparser
-  (:nicknames :dot)
-  (:use :simian :cl)
-  (:export #:unparse-entity
-           #:unparse-entity-cluster
-           #:unparse-view
-           #:indent
-           #:unparse-graph))
+;;;===================================================================================
 
 (in-package :dot)
 
@@ -39,18 +25,6 @@
 (defmethod unparse ((ent entity))
           (short-name ent)
           (mapcar #'unparse (relationships ent)))
-
-(defmethod unparse-graph (name nodes edges attributes)
-  (format nil "
-digraph ~s{
-~{    ~a;~%~}
-~{    ~a;~%~}
-~{    ~a;~%~}
-}"
-          name
-          (mapcar #'unparse-attribute-statement attributes)
-          (mapcar #'unparse-node nodes)
-          (mapcar #'unparse-edge edges)))
 
 (defmethod unparse-attribute-statement ((att string))
   att)
@@ -88,6 +62,18 @@ digraph ~s{
   (declare (ignorable verbose))
   edge)
 
+(defmethod unparse-graph (name nodes edges attributes)
+  (format nil "
+digraph ~s{
+~{    ~a;~%~}
+~{    ~a;~%~}
+~{    ~a;~%~}
+}"
+          name
+          (mapcar #'unparse-attribute-statement attributes)
+          (mapcar #'unparse-node nodes)
+          (mapcar #'unparse-edge edges)))
+
 (defmethod unparse-edge ((rel binary-relationship) &optional verbose)
   (let* ((lhs-mult (multiplicity (lhs rel)))
          (rhs-mult (multiplicity (rhs rel)))
@@ -104,10 +90,10 @@ digraph ~s{
                       ((equalp lhs-mult '(1 *)) "crow")
                       (t (error "unhandled multiplicity: ~a" lhs-mult))))
          (lhs-label (if verbose
-                        (english::unparse-multiplicity lhs-mult)
+                        (unparse-multiplicity lhs-mult)
                         (format nil "~a" lhs-mult)))
          (rhs-label (if verbose
-                        (english::unparse-multiplicity rhs-mult)
+                        (unparse-multiplicity rhs-mult)
                         (format nil "~a" rhs-mult)))
          (line-style (if (member 0 lhs-mult) "dashed" "solid")))
     (unparse-edge (list (name (entity (lhs rel))) "->" (name (entity (rhs rel)))
@@ -169,7 +155,7 @@ digraph ~s{
                            (list "bgcolor = \"transparent\"")))))
 
 (defun unparse-entity-cluster (name ents)
-  (let* ((entities (mapcar #'(lambda (e) (if (typep e 'entity) e (find-entity (keywordify e))))
+  (let* ((entities (mapcar #'(lambda (e) (if (typep e 'entity) e (find-entity e)))
                            ents))
          (edges (find-edges entities)))
     (format nil "~a"

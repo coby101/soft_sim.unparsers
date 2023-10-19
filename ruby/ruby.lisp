@@ -1,44 +1,10 @@
-;;;===========================================================================
-;;; file:   ruby.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-07-23
+;;;========================================================================================
 ;;;
-;;;---------------------------------------------------------------------------
+;;;  - functions and methods related to unparsing ruby code for simian:*application* objects
 ;;;
-;;;  - code related to unparsing ruby code for simian:*application* objects
-;;;
-;;;===========================================================================
-
-(defpackage :simian.ruby-unparser
-  (:nicknames :ruby :ruby-unparser)
-  (:use :simian :cl)
-  (:export #:comment
-           #:comment-with-warning
-           #:comment-out
-           #:indent-block
-           #:unparse
-           #:unparse-method
-           #:unparse-expression
-           #:negate-expression
-           #:unparse-datatype
-           #:unparse-formatting
-           #:unparse-array
-           #:unparse-hash
-           #:unparse-range
-           #:unparse-lambda
-           #:is-range?
-           #:unparse-data
-           #:unparse-if-statement
-           #:make-indent
-           #:make-legal-name
-           #:model-name
-           #:schema-name
-           #:*ruby-constants*
-           #:*include-rails*))
+;;;========================================================================================
 
 (in-package :ruby)
-
-(load-unparser "sql")
 
 (defparameter *include-rails* nil
   "set to t if you want outputed code to use Rails methods outside of standard Ruby")
@@ -123,6 +89,9 @@
              last-char
              (clean-name last-char))))))
 
+(defun make-indent (&optional (level *nesting-level*))
+  (make-string (* 2 level) :initial-element #\Space))
+
 (defun comment-out (stream str &rest args)
   (let ((comment (apply #'format nil str args)))
     (format stream
@@ -143,11 +112,11 @@
   (apply #'warn str args)
   (apply #'comment-out stream str args))
 
-(defun make-indent (&optional (level *nesting-level*))
-  (make-string (* 2 level) :initial-element #\Space))
-
 (defun unparse-array (list)
   (format nil "[~{~a~^, ~}]" (mapcar #'unparse list)))
+
+(defun unparse-hash-key (string)
+  (format nil ":~(~a~)" string))
 
 (defun unparse-hash (key-value-pairs &key one-line)
   (let* ((lvl1 (if one-line "" (make-indent)))
@@ -459,7 +428,7 @@
   (format nil "errors.add(:~a, ~s)" (unparse (primary-key (my-entity (car args))))
             "deletion is not allowed"))
 
-(defmethod unparse-expression ((operator (eql '$rows)) &optional args)
+'(defmethod unparse-expression ((operator (eql '$rows)) &optional args)
   (unless *include-rails*
     (error "this operator is not convertible to standard ruby (~a)" operator)) 
   (let ((class (model-name (car args)))

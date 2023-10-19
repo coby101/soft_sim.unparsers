@@ -1,25 +1,13 @@
-;;;===========================================================================
-;;; file:   yaml.lisp
-;;; auth:   Coby Beck
-;;; date:   2022-01-21
+;;;=========================================================================================
 ;;;
-;;;---------------------------------------------------------------------------
-;;;   code to generate yml data files for simian:*application* object data
-;;;---------------------------------------------------------------------------  
+;;;   methods and functions to generate yml data files for simian:*application* object data
 ;;;
-;;;===========================================================================
-
-
-(defpackage :simian.yml-unparser
-  (:nicknames :yml :yml-unparser)
-  (:use :cl :simian)
-  (:export #:comment
-           #:indent
-           #:unparse
-           #:unparse-pair-tree
-           #:unparse-mapping))
+;;;=========================================================================================
 
 (in-package :yml)
+
+(defun indent (&optional (level *nesting-level*))
+  (make-string (* 2 level) :initial-element #\Space))
 
 (defun comment (str &rest args)
   (let ((comment (apply #'format nil str args)))
@@ -31,21 +19,18 @@
                     (format nil "~%"))
             (indent))))
 
-(defun indent (&optional (level *nesting-level*))
-  (make-string (* 2 level) :initial-element #\Space))
-
 (defun pair? (item)
   (and (listp item)
        (= 2 (length item))
        (atom (car item))))
 
+(defmethod unparse ((obj string))
+  (format nil "~s" obj))
+
 (defun unparse-mapping (pair)
   (unless (pair? pair)
     (error "inappropriate data"))
   (format nil "~a~(~a~): ~a" (indent) (car pair) (unparse (cadr pair))))
-
-(defmethod unparse ((obj string))
-  (format nil "~s" obj))
 
 (defmethod unparse ((obj symbol))
   (format nil "~(~a~)" (symbol-name obj)))

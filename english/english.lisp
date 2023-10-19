@@ -1,36 +1,10 @@
-;;;======================================================================================
-;;; file:   english.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-07-02
-;;;--------------------------------------------------------------------------------------
+;;;========================================================================================================
 ;;;
-;;;  - code related to writing non-technical english for simian:*application* object data
+;;;  - methods and functions related to writing non-technical english for simian:*application* object data
 ;;;   
-;;;======================================================================================
-
-(defpackage simian.english-unparser
-  (:nicknames :english :english-unparser)
-  (:use :simian :cl)
-  (:export #:unparse
-           #:unparse-expression
-           #:unparse-multiplicity
-           #:with-article
-           #:designation-with-article))
+;;;========================================================================================================
 
 (in-package :english)
-
-(defun unparse-multiplicity (expression)
-  (let ((min (car expression))
-        (max (cadr expression)))
-    (if (eql min max)
-        (if (= min 1)
-            "one and only one"
-            (format nil "exactly ~r" min))
-        (format nil "~r ~a" min
-                (if (eql max '*)
-                    "to many"
-                    (format nil "~a ~r" (if (= max 1) "or" "to")
-                            max))))))
 
 (defmethod unparse ((obj t))
   (warn "no unparse method written for objects of type ~a" (type-of obj))
@@ -46,6 +20,9 @@
 (defmethod unparse ((obj (eql '$current-date)))
   "the current date")
 
+(defmethod unparse-expression ((obj string) &optional args)
+  (when args (error "we shouldn't have any args here...? (~a)" args))
+  (format nil "~s" obj))
 
 (defmethod unparse ((obj list))
   (if (and (or (typep (car obj) 'entity) (typep (car obj) 'relation))
