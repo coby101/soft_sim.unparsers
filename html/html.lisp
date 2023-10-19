@@ -49,15 +49,11 @@
 (defmethod theading ((att attribute) &rest attributes)
   (apply #'tag "th" (short-name att) attributes))
 
-(defun table (head body &rest attributes)
-  (format nil "~a~%~a~&~a~&~a</table>"
-          (apply #'open-tag "table" attributes)
-          (if head (with-nesting (thead head)) "")
-          (if body (with-nesting (tbody body)) "")
-          (make-indent)))
-
 (defun tcell (content &rest attributes)
   (apply #'tag "td" content attributes))
+
+(defmethod trow ((content string) &rest attributes)
+  (apply #'tag "tr" content attributes))
 
 (defmethod tbody ((content string) &rest attributes)
   (apply #'tag "tbody" content attributes))
@@ -80,8 +76,12 @@
                        (tag "tr" (format nil fmt-str col-headings))))
            attributes)))
 
-(defmethod trow ((content string) &rest attributes)
-  (apply #'tag "tr" content attributes))
+(defun table (head body &rest attributes)
+  (format nil "~a~%~a~&~a~&~a</table>"
+          (apply #'open-tag "table" attributes)
+          (if head (with-nesting (thead head)) "")
+          (if body (with-nesting (tbody body)) "")
+          (make-indent)))
 
 (defmethod trow ((cells list) &rest attributes)
   (let ((fmt-str (format nil "~~{~%~a<td>~~a</td>~~}~%~a"

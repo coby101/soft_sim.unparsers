@@ -112,11 +112,72 @@
   (apply #'warn str args)
   (apply #'comment-out stream str args))
 
+(defmethod unparse ((obj t))
+  (warn "no unparse method written for objects of type ~a" (type-of obj))
+  (simian::unparse obj))
+
+(defmethod unparse-expression ((obj t) &optional args)
+  (when args (error "we shouldn't have any args here...? (~a)" args))
+  (unparse obj))
+
+(defmethod unparse ((obj relation)) (call-next-method)); (unparse (keywordify (schema-name obj))))
+(defmethod unparse ((obj string)) (format nil "~s" obj))
+(defmethod unparse ((obj float)) (format nil "~f" obj))
+(defmethod unparse ((obj integer)) (format nil "~d" obj))
+
+(defun case-sensitive-symbol-name(symbol)
+  (let ((symbol-name (symbol-name symbol)))
+    (if (equal symbol-name (string-upcase symbol-name))
+        (string-downcase symbol-name)
+        symbol-name)))
+
+(defmethod unparse ((obj symbol))
+  (cond ((eq obj :null) "nil")
+        ((eq obj t) "true")
+        ((eq obj nil) "nil")
+        ((keywordp obj) (format nil ":~a" (snake-case (case-sensitive-symbol-name obj))))
+        (t (format nil "~a" (case-sensitive-symbol-name obj)))))
+
+(defmethod unparse ((obj list))
+  (if (and (= 2 (length obj))
+           (field-reference-expression? obj)
+           (or (eq (entity (car obj)) (my-entity (cadr obj)))
+               (eq (car obj) (my-entity (cadr obj)))))
+      (if (eq (entity (car obj)) (my-entity (cadr obj)))
+          (format nil "~a_~a" (snake-case (name (car obj))) (schema-name (cadr obj))) 
+          (unparse (cadr obj)))
+      (if (null obj)
+          "nil"
+          (mapcar #'unparse-expression obj))))
+
+(defmethod unparse ((obj entity))
+  ;; snake-case is a bit arbitrary but a common convention
+  (schema-name obj))
+
+(defmethod unparse ((obj attribute))
+  (snake-case (name obj)))
+
+(defmethod unparse ((obj calculated-attribute))
+  (unparse (expression (formula obj))))
+
+(defmethod unparse ((obj operator))
+  (unparse (operator-key obj)))
+
+(defmethod unparse ((obj formula))
+  (let ((exp (expression obj)))
+    (etypecase exp
+      (string exp)
+      (list (unparse-expression (car exp) (cdr exp)))
+      (attribute (unparse exp)))))
+
 (defun unparse-array (list)
   (format nil "[~{~a~^, ~}]" (mapcar #'unparse list)))
 
 (defun unparse-hash-key (string)
   (format nil ":~(~a~)" string))
+
+(defun hash-data(obj)
+  (and obj (listp obj) (every #'listp obj)))
 
 (defun unparse-hash (key-value-pairs &key one-line)
   (let* ((lvl1 (if one-line "" (make-indent)))
@@ -130,9 +191,6 @@
                                   (value (cadr pair)))
                               (format nil "~a =>~a" (unparse-expression key) (if (hash-data value) (unparse-hash value :one-line one-line) (format nil " ~a" (unparse-expression value)))))))
                     key-value-pairs))))
-
-(defun hash-data(obj)
-  (and obj (listp obj) (every #'listp obj)))
 
 (defun is-range? (str)
   (and (char= #\( (elt str 0))
@@ -167,11 +225,11 @@
       (format code " }"))))
 
  
-(defmethod unparse-attribute-value ((attribute attribute) (value t))
-  (unparse-data (data-type attribute) value))
-
 (defmethod unparse-data ((type t) (value t))
   (format nil "~a" value))
+
+(defmethod unparse-attribute-value ((attribute attribute) (value t))
+  (unparse-data (data-type attribute) value))
 
 (defmethod unparse-data ((type (eql :float)) (value t))
   (format nil "~a.to_f" value))
@@ -191,61 +249,6 @@
 (defmethod unparse-data ((type (eql :record)) (value t))
   (unparse-array value))
 
-
-
-(defmethod unparse ((obj t))
-  (warn "no unparse method written for objects of type ~a" (type-of obj))
-  (simian::unparse obj))
-
-(defmethod unparse ((obj relation)) (call-next-method)); (unparse (keywordify (schema-name obj))))
-(defmethod unparse ((obj string)) (format nil "~s" obj))
-(defmethod unparse ((obj float)) (format nil "~f" obj))
-(defmethod unparse ((obj integer)) (format nil "~d" obj))
-(defmethod unparse ((obj symbol))
-  (cond ((eq obj :null) "nil")
-        ((eq obj t) "true")
-        ((eq obj nil) "nil")
-        ((keywordp obj) (format nil ":~a" (snake-case (case-sensitive-symbol-name obj))))
-        (t (format nil "~a" (case-sensitive-symbol-name obj)))))
-
-(defun case-sensitive-symbol-name(symbol)
-  (let ((symbol-name (symbol-name symbol)))
-    (if (equal symbol-name (string-upcase symbol-name))
-        (string-downcase symbol-name)
-        symbol-name)))
-
-(defmethod unparse ((obj list))
-  (if (and (= 2 (length obj))
-           (field-reference-expression? obj)
-           (or (eq (entity (car obj)) (my-entity (cadr obj)))
-               (eq (car obj) (my-entity (cadr obj)))))
-      (if (eq (entity (car obj)) (my-entity (cadr obj)))
-          (format nil "~a_~a" (snake-case (name (car obj))) (schema-name (cadr obj))) 
-          (unparse (cadr obj)))
-      (if (null obj)
-          "nil"
-          (mapcar #'unparse-expression obj))))
-
-(defmethod unparse ((obj entity))
-  ;; snake-case is a bit arbitrary but a common convention
-  (schema-name obj))
-
-(defmethod unparse ((obj attribute))
-  (snake-case (name obj)))
-
-(defmethod unparse ((obj calculated-attribute))
-  (unparse (expression (formula obj))))
-
-(defmethod unparse ((obj operator))
-  (unparse (operator-key obj)))
-
-(defmethod unparse ((obj formula))
-  (let ((exp (expression obj)))
-    (etypecase exp
-      (string exp)
-      (list (unparse-expression (car exp) (cdr exp)))
-      (attribute (unparse exp)))))
-
 (defmethod unparse-expression ((obj attribute) &optional args)
   (when args
     (error "we shouldn't have any args here...? (~a)" args))
@@ -255,7 +258,6 @@
   (when args
     (error "we shouldn't have any args here...? (~a)" args))
   (unparse-expression (formula obj)))
-
 
 (defmethod unparse-expression ((obj t) &optional args)
   (when args (error "we shouldn't have any args here...? (~a)" args))

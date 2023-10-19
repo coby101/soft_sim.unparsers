@@ -60,6 +60,10 @@
   (warn "no unparse method written for objects of type ~a" (type-of obj))
   (simian::unparse obj))
 
+(defmethod unparse-expression ((obj t) &optional args)
+  (when args (error "we shouldn't have any args here...? (~a)" args))
+  (unparse obj))
+
 (defmethod unparse ((obj string))
   (format nil "'~a'" (escape-characters obj #\' #\')))
 (defmethod unparse ((obj number)) obj)
@@ -106,10 +110,6 @@
     (error "we shouldn't have any args here...? (~a)" args))
   (unparse-expression (formula obj)))
 
-(defmethod unparse-expression ((obj t) &optional args)
-  (when args (error "we shouldn't have any args here...? (~a)" args))
-  (unparse obj))
-
 (defmethod unparse-expression ((exp string) &optional args)
   (when args (error "we shouldn't have any args here...? (~a)" args))
   (unparse exp))
@@ -117,6 +117,12 @@
 (defmethod unparse-expression ((exp number) &optional args)
   (when args (error "we shouldn't have any args here...? (~a)" args))
   exp)
+
+(defun unparse-select (fields tables wheres)
+  (format nil "select ~{~a~^, ~} from ~{~a~^, ~}~a LIMIT 1" (mapcar #'unparse fields)
+	  (mapcar #'(lambda (table) (snake-case (plural table))) tables)
+	  (if wheres (format nil " where ~{~a~^ AND ~}" (mapcar #'unparse-expression wheres))
+	      "")))
 
 (defmethod unparse-expression ((obj list) &optional args)
   (if (or (typep (car obj) 'operator) (operator-symbol? (car obj)))
@@ -158,6 +164,9 @@
 		      (unparse att)))
       (error "unable to resolve attribute reference (~a, ~a) without a condition component" att context)))
 
+(defmethod reference-field-name ((rel relation))
+  (snake-case (strcat (name rel) "_id")))
+
 (defmethod unparse-attribute-references ((att attribute) (context relation) &optional obj-var)
   (if (find att (attributes context))
       (let ((entity (entity context)))
@@ -166,9 +175,6 @@
 		 (unparse entity) (unparse (primary-key entity)) (if obj-var (strcat obj-var ".") "")
 		 (reference-field-name context))))
       (error "unable to resolve attribute reference (~a, ~a)" att context)))
-
-(defmethod reference-field-name ((rel relation))
-  (snake-case (strcat (name rel) "_id")))
   
 (defmethod unparse-attribute-references ((expr list) (context t) &optional obj-var)
   (if (field-reference-expression? expr)
@@ -187,13 +193,6 @@
       (mapcar #'(lambda (ex)
                   (unparse-attribute-references ex context obj-var))
               expr)))
-
-;;qqq debuggin this (sql::unparse-expression (caddr (predicate (first (states @project)))))
-(defun unparse-select (fields tables wheres)
-  (format nil "select ~{~a~^, ~} from ~{~a~^, ~}~a LIMIT 1" (mapcar #'unparse fields)
-	  (mapcar #'(lambda (table) (snake-case (plural table))) tables)
-	  (if wheres (format nil " where ~{~a~^ AND ~}" (mapcar #'unparse-expression wheres))
-	      "")))
 
 #|
 "'Neo' = (select code from lookups where parent_entities.name = lookups.name"

@@ -26,14 +26,6 @@
           (short-name ent)
           (mapcar #'unparse (relationships ent)))
 
-(defmethod unparse-attribute-statement ((att string))
-  att)
-;; if being passed a list it is assumed to be in the form:
-;;   (ID &rest attributes) where elements of attributes are
-;;     either literal strings or (name value) pairs
-(defmethod unparse-attribute-statement ((att list))
-  (format nil "~a [~{~a~^; ~}]" (car att) (mapcar #'unparse-attribute (cdr att))))
-
 (defmethod unparse-attribute ((att string))
   att)
 (defmethod unparse-attribute ((att list))
@@ -43,6 +35,14 @@
           (error "do not use html except as a label value"))
         (format nil "~a = ~a" (car att) (cadr att)))      
       (format nil "~a = ~s" (car att) (cadr att))))
+
+(defmethod unparse-attribute-statement ((att string))
+  att)
+;; if being passed a list it is assumed to be in the form:
+;;   (ID &rest attributes) where elements of attributes are
+;;     either literal strings or (name value) pairs
+(defmethod unparse-attribute-statement ((att list))
+  (format nil "~a [~{~a~^; ~}]" (car att) (mapcar #'unparse-attribute (cdr att))))
 
 (defmethod unparse-node ((node string))
   node)
@@ -134,6 +134,14 @@ digraph ~s{
                            (mapcar #'unparse-edge extended-relations)
                            (list "bgcolor = \"transparent\"")))))
 
+(defun find-edges (entities)
+  (remove-if-not
+   #'(lambda (r)
+       (and (member (entity (lhs r)) entities)
+            (member (entity (rhs r)) entities)))
+   (apply #'append
+          (mapcar #'relationships entities))))
+
 ;; :complete is every viewable entity plus all their relations of any sort
 ;; :basic is every viewable entity
 (defun unparse-view (view &optional (extent :basic))
@@ -163,14 +171,6 @@ digraph ~s{
                            entities
                            (remove-duplicates edges)
                            (list "bgcolor = \"transparent\"")))))
-
-(defun find-edges (entities)
-  (remove-if-not
-   #'(lambda (r)
-       (and (member (entity (lhs r)) entities)
-            (member (entity (rhs r)) entities)))
-   (apply #'append
-          (mapcar #'relationships entities))))
 
 ;;;===========================================================================
 ;;; Local variables:
