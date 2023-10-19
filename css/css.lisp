@@ -1,6 +1,6 @@
 ;;;====================================================================================
 ;;;
-;;;  - methods and functions related to unparsing CSS from simian:*application* objects
+;;;  - methods and functions related to unparsing CSS from simian generators
 ;;;
 ;;;====================================================================================
 

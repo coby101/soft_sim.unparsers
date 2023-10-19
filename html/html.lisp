@@ -1,6 +1,6 @@
 ;;;=======================================================================================
 ;;;
-;;;  - methods and functions related to writing HTML for simian:*application* object data
+;;;  - methods and functions related to writing HTML for simian generators
 ;;;
 ;;;=======================================================================================
 

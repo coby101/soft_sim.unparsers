@@ -1,6 +1,6 @@
 ;;;==================================================================================
 ;;;
-;;;  - methods and functions related to writing SQL for simian:*application* objects
+;;;  - methods and functions related to writing SQL for simian generators
 ;;;   
 ;;;==================================================================================
 

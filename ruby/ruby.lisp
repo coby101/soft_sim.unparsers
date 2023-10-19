@@ -1,6 +1,6 @@
 ;;;========================================================================================
 ;;;
-;;;  - functions and methods related to unparsing ruby code for simian:*application* objects
+;;;  - functions and methods related to unparsing ruby code for simian generators
 ;;;
 ;;;========================================================================================
 

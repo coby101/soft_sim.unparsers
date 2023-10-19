@@ -1,6 +1,6 @@
 ;;;========================================================================================================
 ;;;
-;;;  - methods and functions related to writing non-technical english for simian:*application* object data
+;;;  - methods and functions related to writing non-technical english for simian generators
 ;;;   
 ;;;========================================================================================================
 

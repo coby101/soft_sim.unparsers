@@ -1,7 +1,7 @@
 ;;;===================================================================================
 ;;;
 ;;;  - methods and functions related to creating .DOT files for tools such as graphviz
-;;;    to create entity relationship diagrams for simian:*application* objects
+;;;    to create entity relationship diagrams for simian generators
 ;;;   
 ;;;===================================================================================
 

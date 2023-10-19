@@ -1,6 +1,6 @@
 ;;;===========================================================================================
 ;;;
-;;;  - methods and functions related to unparsing java script for simian:*application* objects
+;;;  - methods and functions related to unparsing java script for simian generators
 ;;;
 ;;;===========================================================================================
 

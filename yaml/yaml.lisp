@@ -1,6 +1,6 @@
 ;;;=========================================================================================
 ;;;
-;;;   methods and functions to generate yml data files for simian:*application* object data
+;;;   methods and functions to generate yml data files for simian generators
 ;;;
 ;;;=========================================================================================
 
