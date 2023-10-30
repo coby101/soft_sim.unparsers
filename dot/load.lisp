@@ -1,7 +1,7 @@
 
 (defpackage :simian.dot-unparser
   (:nicknames :dot)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:unparse-entity
            #:unparse-entity-cluster
            #:unparse-view

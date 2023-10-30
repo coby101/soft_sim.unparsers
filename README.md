@@ -16,7 +16,7 @@ BEGIN file load.lisp
 ```
 (defpackage simian.language-unparser
   (:nicknames :language :lang)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:comment
            #:unparse
            #:unparse-method

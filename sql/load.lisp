@@ -1,7 +1,7 @@
 
 (defpackage :simian.sql-unparser
   (:nicknames :sql-unparser :sql)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:comment
            #:unparse
            #:unparse-table-definition

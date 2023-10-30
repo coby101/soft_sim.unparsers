@@ -1,7 +1,7 @@
 
 (defpackage :simian.js-unparser
   (:nicknames :js)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:comment-out
            #:make-indent))
 

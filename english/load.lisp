@@ -1,7 +1,7 @@
 
 (defpackage simian.english-unparser
   (:nicknames :english :english-unparser)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:unparse
            #:unparse-expression
            #:unparse-multiplicity

@@ -1,7 +1,7 @@
 
 (defpackage simian.html-unparser
   (:nicknames :html)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:comment
            #:unparse
            #:make-indent

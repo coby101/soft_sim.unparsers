@@ -1,7 +1,7 @@
 
 (defpackage :simian.css-unparser
   (:nicknames :css)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:comment-out))
 
 (load (merge-pathnames "css.lisp" *load-truename*))

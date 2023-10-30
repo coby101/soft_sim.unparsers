@@ -2,7 +2,7 @@
 
 (defpackage :simian.ruby-unparser
   (:nicknames :ruby :ruby-unparser)
-  (:use :simian :cl)
+  (:use :simian :simian.tests :cl)
   (:export #:comment
            #:comment-with-warning
            #:comment-out
