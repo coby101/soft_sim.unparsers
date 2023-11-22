@@ -2,18 +2,14 @@
 
 (defpackage :simian.ruby-unparser
   (:nicknames :ruby :ruby-unparser)
-  (:use :simian :simian.tests :cl)
+  (:use :cl :software-simian :unparser)
   (:export #:comment
            #:comment-with-warning
            #:comment-out
            #:indent-block
-           #:unparse
            #:unparse-method
-           #:unparse-expression
-           #:negate-expression
            #:unparse-datatype
            #:unparse-formatting
-           #:unparse-array
            #:unparse-hash
            #:unparse-hash-key
            #:unparse-range
@@ -26,7 +22,8 @@
            #:model-name
            #:schema-name
            #:*ruby-constants*
-           #:*include-rails*))
+           #:*include-rails*
+           #:*nesting-level*))
 
 (load (merge-pathnames "ruby.lisp" *load-truename*))
 

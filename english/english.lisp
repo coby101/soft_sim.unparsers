@@ -74,16 +74,6 @@
 (defmethod unparse-expression ((obj relation) &optional args)
   (format nil "~a from the ~a relation is true" (unparse-expression (car args)) (name obj)))
 
-(defmethod unparse-expression ((operator symbol) &optional args)
-  (if (operator-symbol? operator)
-      (progn
-        (warn "no english::unparse-expression method written for ~a" operator)
-        (format nil "(~:(~a~) ~{~a~^ ~})" operator (mapcar #'unparse args)))
-      (call-next-method)))
-
-(defmethod unparse-expression ((operator operator) &optional args)
-  (unparse-expression (operator-key operator) args))
-
 (defmethod unparse-expression ((operator (eql '$IN)) &optional args)
   (format nil "~a is one of ~a" (unparse (car args)) (unparse-expression (cdr args))))
 (defmethod unparse-expression ((operator (eql '$NOT-IN)) &optional args)

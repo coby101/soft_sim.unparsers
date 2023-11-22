@@ -12,9 +12,6 @@
 
 (in-package :simian)
 
-(let ((sb-ext:*muffled-warnings*  'style-warning))
-  (load-unparser "sql"))
-
 '(define-test :sql
   "CREATE TABLE looks good"
 (with-new-schema

@@ -10,9 +10,6 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(let ((sb-ext:*muffled-warnings*  'style-warning))
-  (load-unparser "english"))
-
 (in-package :simian)
 
 (define-test :english "simple formulas unparse nicely"
