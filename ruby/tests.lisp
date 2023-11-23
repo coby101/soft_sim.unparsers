@@ -1,17 +1,8 @@
 ;;;===========================================================================
-;;; file:   lib/tests/unparsing-ruby.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-07-07
 ;;;
-;;;---------------------------------------------------------------------------
-;;;  tests for code in unparsers/ruby.lisp
+;;;  tests for code in unparsers/ruby/ruby.lisp
 ;;;  
-;;;  
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defpackage :simian.ruby-unparser.tests
-  (:nicknames :ruby-tests)
-  (:use :cl :tests :lisp-unit2 :ruby :unparser))
+;;;===========================================================================
 
 (in-package :ruby-tests)
 
@@ -71,7 +62,7 @@
   (assert-equal "(1 * 1) unless foo.my_method" (unparse-expression :unless :ruby '(($method "my_method" foo) ($multiply 1 1))))
   (assert-equal "(1 * 1) if foo.my_method" (unparse-expression :when :ruby '(($method "my_method" foo) ($multiply 1 1))))
   (assert-equal (format nil "if true~%  1~%else~%  2~%end") (unparse-expression :if :ruby '(t 1 2)))
-  (assert-equal (format nil "  if true~%    1~%  else~%    2~%  end") (let ((ruby:*nesting-level* 1)) (unparse-expression :if :ruby '(t 1 2))))
+  (assert-equal (format nil "  if true~%    1~%  else~%    2~%  end") (let ((*nesting-level* 1)) (unparse-expression :if :ruby '(t 1 2))))
   (assert-equal "(1 + 1)" (unparse-expression :add :ruby '(1 1)))
   (assert-equal "(1 - 1)" (unparse-expression :subtract :ruby '(1 1)))
   (assert-equal "(1 * 1)" (unparse-expression :multiply :ruby '(1 1)))

@@ -60,12 +60,6 @@
   (apply #'warn str args)
   (apply #'comment-out stream str args))
 
-(defun case-sensitive-symbol-name(symbol)
-  (let ((symbol-name (symbol-name symbol)))
-    (if (equal symbol-name (string-upcase symbol-name))
-        (string-downcase symbol-name)
-        symbol-name)))
-
 (defmethod unparse ((obj symbol) (language (eql :ruby)))
   (cond ((eq obj :null) "nil")
         ((eq obj t) "true")
@@ -76,14 +70,6 @@
 ; seems wrong headed
 ;(defmethod unparse ((obj operator) (language (eql :ruby)))
 ;  (unparse (operator-key obj) language))
-
-; I don't think this should be necessary, delete after refactor
-(defmethod unparse ((obj formula) (language (eql :ruby)))
-  (let ((exp (expression obj)))
-    (etypecase exp
-      (string exp)
-      (list (unparse-expression (car exp) language (cdr exp)))
-      (attribute (unparse exp language)))))
 
 (defmethod unparse-array ((list list) (language (eql :ruby)))
   (format nil "[~{~a~^, ~}]" (mapcar #'(lambda (elt) (unparse elt :ruby)) list)))

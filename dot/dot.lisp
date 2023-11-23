@@ -10,24 +10,16 @@
 ;; sytax defined here: https://graphviz.org/doc/info/lang.html
 ;;; Test your stuff here: http://magjac.com/graphviz-visual-editor/
 
-(defmethod unparse ((obj t))
-  (warn "no unparse method written for objects of type ~a" (type-of obj))
-  (simian::unparse obj))
+(defmethod unparse ((obj string) (language (eql :dot))) obj)
 
-(defmethod unparse ((obj string))
-  obj)
+(defmethod unparse ((obj number) (language (eql :dot))) obj)
+(defmethod unparse ((obj symbol) (language (eql :dot))) (format nil "~(~a~)" obj))
 
-(defmethod unparse ((obj number))
-  obj)
-(defmethod unparse ((obj symbol))
-  (format nil "~(~a~)" obj))
-
-(defmethod unparse ((ent entity))
+(defmethod unparse ((ent entity) (language (eql :dot)))
           (short-name ent)
-          (mapcar #'unparse (relationships ent)))
+          (mapcar #'(lambda (rel) (unparse rel language)) (relationships ent)))
 
-(defmethod unparse-attribute ((att string))
-  att)
+(defmethod unparse-attribute ((att string)) att)
 (defmethod unparse-attribute ((att list))
   (if (html-string? (cadr att))
       (progn
@@ -36,16 +28,14 @@
         (format nil "~a = ~a" (car att) (cadr att)))      
       (format nil "~a = ~s" (car att) (cadr att))))
 
-(defmethod unparse-attribute-statement ((att string))
-  att)
+(defmethod unparse-attribute-statement ((att string)) att)
 ;; if being passed a list it is assumed to be in the form:
 ;;   (ID &rest attributes) where elements of attributes are
 ;;     either literal strings or (name value) pairs
 (defmethod unparse-attribute-statement ((att list))
   (format nil "~a [~{~a~^; ~}]" (car att) (mapcar #'unparse-attribute (cdr att))))
 
-(defmethod unparse-node ((node string))
-  node)
+(defmethod unparse-node ((node string)) node)
 ;; if passed a list it should be of the form (node-id &rest attributes)
 (defmethod unparse-node ((node list))
   ;; we could do some checking of legal attribute properties for nodes

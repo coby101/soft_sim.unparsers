@@ -1,12 +1,8 @@
 ;;;===========================================================================
 ;;;
-;;;  tests for unparsers/simian.lisp
+;;;  tests for unparsers/simian/simian.lisp
 ;;;
 ;;;===========================================================================
-
-(defpackage :simian.simian-unparser.tests
-  (:nicknames :simian-tests)
-  (:use :cl :tests :lisp-unit2 :unparser))
 
 (in-package :simian-tests)
 
@@ -20,7 +16,7 @@
   (assert-equal "t" (unparse t :simian))
   (assert-equal "nil" (unparse nil :simian))
   (assert-equal "(1 2 3 (\"a\" b 16))" (unparse '(1 2 3 ("a" b 16)) :simian))
-  (let ((obj '(4 5 6 "\"seven\""))) (assert-equal (unparse obj :simian) (unparse-array obj :simian)))
+  (let ((obj '(4 5 6 "seven"))) (assert-equal (unparse obj :simian) (unparse-array obj :simian)))
 )
 
 (define-test simple-unparse-expression-tests

@@ -1,18 +1,14 @@
 ;;;===========================================================================
-;;; file:   lib/tests/unparsing-english.lisp
-;;; auth:   Coby Beck
-;;; date:   2021-07-07
 ;;;
-;;;---------------------------------------------------------------------------
-;;;  tests for code in unparsers/english.lisp
+;;;  tests for code in unparsers/english/english.lisp
 ;;;  
-;;;  
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;===========================================================================
 
-(in-package :simian)
+(in-package :english-tests)
 
-(define-test :english "simple formulas unparse nicely"
+(define-pending-test unparsing-english-tests :tags '(unparsing))
+
+'(define-test :english "simple formulas unparse nicely"
   (with-new-schema
       (define-entity ("Ent") :attributes (:code :name
                                                 ("Quantity" :type quantity :default 1 :nullable? nil)

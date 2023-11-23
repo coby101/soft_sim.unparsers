@@ -1,7 +1,7 @@
 
 (defpackage simian.html-unparser
   (:nicknames :html)
-  (:use :simian :simian.tests :cl)
+  (:use :cl :software-simian :unparser)
   (:export #:comment
            #:unparse
            #:make-indent
@@ -22,6 +22,10 @@
            #:close-tag
            #:p
            ))
+
+(defpackage :simian.html-unparser.tests
+  (:nicknames :html-tests)
+  (:use :cl :tests :lisp-unit2 :html :unparser))
 
 (load (merge-pathnames "html.lisp" *load-truename*))
 

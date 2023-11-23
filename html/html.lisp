@@ -107,39 +107,30 @@
   (let ((*nesting-level* 0))
     (apply #'tag "p" (or content "") attributes)))
 
-
-(defmethod unparse ((obj t))
-  (warn "no unparse method written for objects of type ~a" (type-of obj))
-  (simian::unparse obj))
-
 ;;; just a place holder, this needs to escape all manner of crap
-(defmethod unparse ((obj string))
-  (warn "we have ot really written this one yet...")
+(defmethod unparse ((obj string) (language (eql :html)))
+  (warn "we have not really written this one yet...")
   (format nil "~a" obj))
-(defmethod unparse ((obj number)) obj)
-(defmethod unparse ((obj symbol)) (format nil "~a" (string-downcase (symbol-name obj))))
+(defmethod unparse ((obj number) (language (eql :html))) obj)
+(defmethod unparse ((obj symbol) (language (eql :html))) (format nil "~a" (string-downcase (symbol-name obj))))
 
-(defmethod unparse ((obj list)) (mapcar #'unparse obj))
+(defmethod unparse ((obj list) (language (eql :html))) (mapcar #'(lambda (item) (unparse item language)) obj))
+(defmethod unparse ((ent entity) (language (eql :html))) (long-name ent))
+(defmethod unparse ((att attribute) (language (eql :html))) (long-name att))
 
-(defmethod unparse ((ent entity))
-  (long-name ent))
+(defmethod unparse ((panel flat-listing) (language (eql :html)))
+  (table nil (list (mapcar #'(lambda (item) (unparse item language)) (panel-items panel)))))
 
-(defmethod unparse ((att attribute))
-  (long-name att))
-
-(defmethod unparse ((panel flat-listing))
-  (table nil (list (mapcar #'unparse (panel-items panel)))))
-
-(defmethod unparse ((panel view-panel))
+(defmethod unparse ((panel view-panel) (language (eql :html)))
   (table nil (mapcar #'(lambda(row)
-                         (mapcar #'unparse row))
+                         (mapcar #'(lambda (item) (unparse item language)) row))
                      (panel-items panel))))
 
-(defmethod unparse ((list list))
+;; this looks wrong, wait til refactor is complete. It also clobbers a definition above
+(defmethod unparse ((list list) (language (eql :html)))
   (if (field-reference-expression? list)
       (format nil "~a ~a" (name (car list)) (name (cadr list)))
-      (mapcar #'unparse list)))
-
+      (mapcar #'(lambda (item) (unparse item language)) list)))
 
 ;;;===========================================================================
 ;;; Local variables:

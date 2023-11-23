@@ -1,4 +1,11 @@
-(in-package :unparser)
+;;;========================================================================================
+;;;
+;;;  - functions and methods related to unparsing simian specification code for 
+;;;    a simian "generator" that produces 
+;;;
+;;;========================================================================================
+
+(in-package :simian)
 
 (defmethod unparse-list ((list list) (language (eql :simian)))
   ;; we should only be here if we have a list without an operator in first position
@@ -6,9 +13,12 @@
   ;; atomic elements (ie no nested expressions)
   (format nil "(~{~a~^ ~})" (mapcar #'(lambda (obj) (unparse obj language)) list)))
 
+(defmethod unparse-expression ((obj list) (language (eql :simian)) &optional args) 
+  (declare (ignorable args))
+  (unparse-list obj language))
+  
 (defmethod unparse-array ((obj list) (language (eql :simian))) (unparse-list obj language))
 (defmethod unparse ((obj list) (language (eql :simian))) (unparse-list obj language))
-
 
 (defmethod unparse ((obj string)  (language (eql :simian)))  (format nil "~s" obj))
 (defmethod unparse ((obj float)   (language (eql :simian)))   (format nil "~f" obj))
@@ -16,7 +26,6 @@
 (defmethod unparse ((obj symbol)  (language (eql :simian)))  (format nil "~(~a~)" (symbol-name obj)))
 
 (defmethod unparse-expression ((att attribute) (language (eql :simian)) &optional args)
-  (when args
-    (error "unparse-expression called on an attribute should not have any additional argument (~a)"
-           args))
+  (when args 
+    (error "unparse-expression called on an attribute should not have any additional argument (~a)" args))
   (list (id (my-entity att)) (id att)))
