@@ -18,7 +18,8 @@
         ((keywordp obj) (format nil ":~a" (snake-case (case-sensitive-symbol-name obj))))
         (t (format nil "~a" (format nil "~a" (string-downcase (symbol-name obj)))))))
 
-(defmethod unparse ((obj list) (language (eql :sql))) (mapcar #'(lambda (item) (unparse item language)) obj))
+(defmethod unparse ((obj list) (language (eql :sql)))
+  (format nil "(~{~a~^, ~})" (mapcar #'(lambda (item) (unparse item language)) obj)))
 
 (defmethod unparse ((obj attribute) (language (eql :sql)))
   ;; snake-case is a bit arbitrary but a common convention
@@ -137,6 +138,12 @@
           (name (db-platform *implementation*))))
   (format nil "nextval('~a')" (first args)))
 
+(defmethod unparse-expression ((operator (eql :call)) (language (eql :sql)) &optional args)
+  (format nil "~a~a" (first args)
+              (if (cdr args)
+                  (format nil "(~{~a~^, ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) (cdr args)))
+                  "")))
+
 (defmethod unparse-expression ((operator (eql :not)) (language (eql :sql)) &optional args)
   (format nil "NOT(~a)" (unparse-expression (car args) language)))
 
@@ -146,7 +153,7 @@
   (format nil "~a = ~a" (unparse-expression (car args) language)
           (unparse-expression (cadr args) language)))
 
-(defmethod unparse-expression ((operator (eql :=)) (language (eql :sql)) &optional args)
+(defmethod unparse-expression ((operator (eql :!=)) (language (eql :sql)) &optional args)
   (unparse-expression :not-eql language args))
 (defmethod unparse-expression ((operator (eql :not-eql)) (language (eql :sql)) &optional args)
   (format nil "~a != ~a" (unparse-expression (car args) language)
@@ -177,7 +184,7 @@
   (format nil "~a IS NOT NULL" (unparse-expression (car args) language)))
 
 (defmethod unparse-expression ((operator (eql :length)) (language (eql :sql)) &optional args)
-  (unparse-expression :eql
+  (unparse-expression :eql :sql
      (list (list :literal
                  (format nil "LENGTH(~a)" (unparse-expression (car args) language)))
            (unparse-expression (cadr args) language))))
@@ -190,6 +197,17 @@
   (format nil "LENGTH(~a) BETWEEN ~a AND ~a" (unparse-expression (first args) language)
           (unparse-expression (second args) language) (unparse-expression (third args) language)))
 
+(defmethod unparse-expression ((operator (eql :concatenate)) (language (eql :sql)) &optional args)
+  (unparse-expression :strcat language args))
+(defmethod unparse-expression ((operator (eql :strcat)) (language (eql :sql)) &optional args)
+  (format nil "~{~a~^ || ~}" (mapcar #'(lambda(exp)
+                                          (unparse-expression (list :to-string exp) language))
+                                      args)))
+(defmethod unparse-expression ((operator (eql :to-string)) (language (eql :sql)) &optional args)
+  (if (returns-string? (car args))
+      (unparse-expression (car args) language)
+      (format nil "~a::TEXT" (unparse-expression (car args) language))))
+
 (defmethod unparse-expression ((operator (eql :and)) (language (eql :sql)) &optional args)
   (format nil "~{~a~^ AND ~}" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
 
@@ -199,17 +217,26 @@
 (defmethod unparse-expression ((operator (eql :divide)) (language (eql :sql)) &optional args)
   (format nil "(~{~a~^ / ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
 
-(defmethod unparse-expression ((operator (eql :multiply>)) (language (eql :sql)) &optional args)
+(defmethod unparse-expression ((operator (eql :multiply)) (language (eql :sql)) &optional args)
   (format nil "(~{~a~^ * ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
 
 (defmethod unparse-expression ((operator (eql :add)) (language (eql :sql)) &optional args)
-    (format nil "(~{~a~^ + ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
+  (format nil "(~{~a~^ + ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
 
-(defmethod unparse-expression ((operator (eql :subtract>)) (language (eql :sql)) &optional args)
-    (format nil "(~{~a~^ - ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
+(defmethod unparse-expression ((operator (eql :subtract)) (language (eql :sql)) &optional args)
+  (format nil "(~{~a~^ - ~})" (mapcar #'(lambda (arg) (unparse-expression arg language)) args)))
 
 (defmethod unparse-expression ((operator (eql :in)) (language (eql :sql)) &optional args)
-    (format nil "~a IN (~{~a~^, ~})" (unparse-expression (car args) language) (mapcar #'(lambda (arg) (unparse-expression arg language)) (cdr args))))
+  (format nil "~a IN (~{~a~^, ~})" (unparse-expression (car args) language) (mapcar #'(lambda (arg) (unparse-expression arg language)) (cdr args))))
+
+(defmethod unparse-expression ((operator (eql :not-in)) (language (eql :sql)) &optional args)
+  (format nil "~a NOT IN (~{~a~^, ~})" (unparse-expression (car args) language) (mapcar #'(lambda (arg) (unparse-expression arg language)) (cdr args))))
+
+(defmethod unparse-expression ((operator (eql :coalesce)) (language (eql :sql)) &optional args)
+  (format nil "COALESCE~a" (unparse args language)))
+
+(defmethod unparse-expression ((operator (eql :regex)) (language (eql :sql)) &optional args)
+  (format nil "~a ~~* '~a'" (unparse-expression (car args) language) (cadr args)))
 
 
 #|
