@@ -1,3 +1,4 @@
+#(This repo is DEPRECATED and now part of the main Soft-Sim repository)
 # soft_sim.unparsers
 
 Unparsers for outputting components of a soft_sim generatable application in various languages or formats
